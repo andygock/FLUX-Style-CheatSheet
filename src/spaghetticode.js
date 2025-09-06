@@ -80,9 +80,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var clearbut = document.getElementById("clearsearch");
   var numlines = document.querySelectorAll(".numberline span");
   var catsbox = document.getElementById("allcats");
-  var metadatawrapper = document.getElementById("metadataboxes");
-  var dropArea = document.getElementById("drop-area");
-  var allMetaData = document.getElementById("allMetaData");
 
   const titletexts = [];
   titletexts[404] = "Artist not known";
