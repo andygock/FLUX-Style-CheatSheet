@@ -383,6 +383,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 
+  // Close all open styles on Escape key press
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      var activePods = document.querySelectorAll(".stylepod.active");
+      activePods.forEach(function (pod) {
+        pod.classList.remove("active");
+      });
+      // Remove hash from URL
+      const url = window.location.href.replace(/#.*/, "");
+      history.pushState({}, "", url);
+    }
+  });
+
   //Stars - Favorite Styles
   function starfunction(e) {
     if (mystars.includes(e)) {
