@@ -1,3 +1,4 @@
 # temp ignore during development
 img/flux/*
-scripts/*
+*.tmp.*
+tmp/*

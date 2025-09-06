@@ -1,4 +1,5 @@
 import { data } from "./data.js";
+import { exclArtists } from "./data-excluded-artists.js";
 
 const imgSubDir = "flux";
 

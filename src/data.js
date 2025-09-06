@@ -11816,29 +11816,18 @@ export const dataOriginal = [
   },
 ];
 
-// Function to normalize Unicode characters to closest ASCII
-function normalizeUnicode(str) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-// Function to format name from "Last, First" to "First Last"
-function formatName(name) {
-  const parts = name.split(", ");
-  if (parts.length === 2) {
-    return parts[1] + " " + parts[0];
-  }
-  return name; // fallback if not in expected format
-}
+import { formatName, normalizeUnicode } from "./utils.js";
 
 // make a copy called 'data', but change Image filename to new one
 // e.g Prompt of "style of Ignacio Zuloaga" becomes "Ignacio Zuloaga.webp"
 export const data = dataOriginal.map((item) => {
   const formattedName = formatName(item.Name);
   const normalizedName = normalizeUnicode(formattedName);
+  const originalPrompt = item.Prompt;
   return {
     ...item,
     Image: normalizedName + ".webp",
-    Prompt: `style of ${formattedName}`,
+    Prompt: `style of ${normalizedName}`,
     Checkpoint: "flux1-dev-fp8",
   };
 });
