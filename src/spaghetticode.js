@@ -1,3 +1,7 @@
+import { data } from "./data.js";
+
+const imgSubDir = "flux";
+
 document.addEventListener("DOMContentLoaded", function (event) {
   var SearchEngine = "https://www.google.com/search?q=";
 
@@ -122,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   if (menulinks) {
     for (var i = 0; i < menulinks.length; i++) {
-      currentml = menulinks[i];
+      let currentml = menulinks[i];
       currentml.addEventListener("click", function (e) {
         e.preventDefault();
         var mldata = this.dataset.page;
@@ -209,6 +213,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
           '" class="stylepod lazy" data-creatime="' +
           data[i].Creation +
           '" data-bg="./img/' +
+          imgSubDir +
+          "/" +
           data[i].Image +
           '">';
         outputdata = outputdata + '<div class="styleinfo">';
@@ -240,6 +246,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         outputdata =
           outputdata +
           '<p class="extralinks"><a class="zoomimg" title="Zoom" href="./img/' +
+          imgSubDir +
+          "/" +
           data[i].Image +
           '" target="_blank"><img src="./src/zoom-white.svg" width="25" alt="Zoom"><span class="elsp">Zoom</span></a><a href="' +
           LUArtist +
@@ -306,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // Copy Prompt to Clipboard
   function addcopylistener(e, f) {
     for (var i = 0; i < e.length; i++) {
-      currentspan = e[i];
+      let currentspan = e[i];
       currentspan.addEventListener("click", function () {
         var inp = document.createElement("input");
         document.body.appendChild(inp);
@@ -396,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var starbuts = document.querySelectorAll(".starthis");
     if (starbuts) {
       for (var i = 0; i < starbuts.length; i++) {
-        currentstar = starbuts[i];
+        let currentstar = starbuts[i];
         currentstar.addEventListener("click", function (e) {
           e.preventDefault();
           let starbutstyledata = this.closest(".stylepod").dataset.creatime;
@@ -476,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
 
   // Initialize Lazy Loading
-  LL = new LazyLoad({});
+  const LL = new LazyLoad({});
 
   // Fill Search Array for Similar Names + Not Available Artists
   // https://github.com/aceakash/string-similarity
@@ -824,374 +832,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         document.getElementById("styles").classList.remove("is-hidden"); //activate styles div
         searchdiv.classList.remove("is-hidden"); //activate filter/search
       });
-    }
-  }
-
-  // Start of Metadata Viewer
-
-  // Drag and Drop Start
-  // Joseph Zimmerman - https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
-  // Prevent default drag behaviors
-  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-    dropArea.addEventListener(eventName, preventDefaults, false);
-    document.body.addEventListener(eventName, preventDefaults, false);
-  });
-
-  // Highlight drop area when item is dragged over it
-  ["dragenter", "dragover"].forEach((eventName) => {
-    dropArea.addEventListener(eventName, highlight, false);
-  });
-  ["dragleave", "drop"].forEach((eventName) => {
-    dropArea.addEventListener(eventName, unhighlight, false);
-  });
-
-  // Handle dropped files
-  dropArea.addEventListener("drop", handleDrop, false);
-
-  function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  function highlight(e) {
-    dropArea.classList.add("highlight");
-  }
-
-  function unhighlight(e) {
-    dropArea.classList.remove("active");
-  }
-
-  function handleDrop(e) {
-    var dt = e.dataTransfer;
-    var files = dt.files;
-
-    handleFiles(files);
-  }
-
-  function handleFiles(files) {
-    files = [...files];
-    files.forEach(previewFile);
-  }
-
-  // Drag and Drop end
-
-  // Remove Metadata Image
-  document.getElementById("clearimage").addEventListener("click", function (e) {
-    document.getElementById("my-form").reset();
-    allMetaData.innerHTML = "";
-    document.getElementById("gallery").innerHTML = "";
-    metadatawrapper.classList.remove("hasimg");
-  });
-
-  // EXIF Start
-
-  async function previewFile(file) {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    // when loaded, put image in DOM
-    reader.onloadend = function () {
-      let img = document.createElement("img");
-      img.setAttribute("id", "thisimg");
-      img.src = reader.result;
-      document.getElementById("gallery").innerHTML = "";
-      document.getElementById("gallery").appendChild(img);
-      metadatawrapper.classList.add("hasimg");
-    };
-
-    const tags = await ExifReader.load(file).catch((error) => {
-      allMetaData.innerHTML = "<p>No EXIF data detected</p>";
-    });
-    if (tags) {
-      getComment(tags);
-    }
-
-    // https://www.geeksforgeeks.org/how-to-convert-special-characters-to-html-in-javascript/
-    function Encode(string) {
-      var i = string.length,
-        a = [];
-
-      while (i--) {
-        var iC = string[i].charCodeAt();
-        if (iC < 65 || iC > 127 || (iC > 90 && iC < 97)) {
-          a[i] = "&#" + iC + ";";
-        } else {
-          a[i] = string[i];
-        }
-      }
-      return a.join("");
-    }
-
-    // https://github.com/himuro-majika/Stable_Diffusion_image_metadata_viewer
-    function getComment(tags) {
-      //console.dir(JSON.parse(JSON.stringify(tags)));
-      let com = "";
-
-      // Exif - JPG
-      if (tags.UserComment) {
-        com = decodeUnicode(tags.UserComment.value);
-        extractPrompt(com);
-        return;
-      }
-      // A1111 - PNG
-      if (tags.parameters) {
-        com = tags.parameters.description;
-        extractPrompt(com);
-        return;
-      }
-
-      // Comfy UI
-      if (tags.prompt) {
-        com = JSON.parse(tags.prompt.value);
-        extractComfyPrompt(com);
-        return;
-      }
-
-      // Non SD image but tags
-      if (
-        tags &&
-        tags.UserComment === undefined &&
-        tags.parameters === undefined &&
-        tags.prompt === undefined
-      ) {
-        function printValues(obj) {
-          for (var k in obj) {
-            if (
-              !(
-                k == "value" ||
-                k == "Thumbnail" ||
-                k == "Special Instructions" ||
-                k == "Padding"
-              )
-            ) {
-              if (obj[k] instanceof Object) {
-                tagoutput = tagoutput + "<br>" + k + ": ";
-                printValues(obj[k]);
-              } else {
-                tagoutput = tagoutput + obj[k] + " ";
-              }
-            }
-          }
-        }
-
-        let tagoutput = "";
-        var test1 = JSON.stringify(tags).replace(/(^,)|(,$)/g, ""); //trim commas to prevent JSON parse error
-        var tagsobj = JSON.parse(test1);
-        printValues(tagsobj);
-        allMetaData.innerHTML =
-          "<p>No Stable Diffusion EXIF data detected</p><p>" +
-          tagoutput +
-          "</p>";
-      }
-    }
-
-    function decodeUnicode(array) {
-      const plain = array.map((t) => t.toString(16).padStart(2, "0")).join("");
-      if (!plain.match(/^554e49434f44450/)) {
-        return;
-      }
-      const hex = plain
-        .replace(/^554e49434f44450[0-9]/, "")
-        .replace(/[0-9a-f]{4}/g, ",0x$&")
-        .replace(/^,/, "");
-      const arhex = hex.split(",");
-      let decode = "";
-      arhex.forEach((v) => {
-        decode += String.fromCodePoint(v);
-      });
-      return decode;
-    }
-
-    function extractComfyPrompt(com) {
-      const noduplicates = [];
-      let MDOut = "<p><span><strong>UI</strong> ComfyUI</span>";
-
-      const isObject = (val) => {
-        if (val === null) {
-          return false;
-        }
-        return typeof val === "object";
-      };
-
-      const nestedObject = (obj) => {
-        for (const key in obj) {
-          if (isObject(obj[key])) {
-            nestedObject(obj[key]);
-          } else {
-            if (isNaN(key) == true && !noduplicates.includes(key)) {
-              MDOut =
-                MDOut +
-                "<span><strong>" +
-                key +
-                "</strong> " +
-                obj[key] +
-                "</span>";
-              noduplicates.push(key);
-            }
-          }
-        }
-      };
-      nestedObject(com);
-
-      MDOut = MDOut + "</p>";
-      allMetaData.innerHTML = MDOut;
-    }
-
-    function extractPrompt(com) {
-      const positive = Encode(extractPositivePrompt(com));
-      const negative = Encode(extractNegativePrompt(com));
-      const others = extractOthers(com); //is encoded while building the output below
-      const PluginMetaData = Encode(extractPluginData(com));
-
-      if (!positive && !negative && !others) return;
-      const prompt = {
-        positive: positive,
-        negative: negative,
-        others: others,
-        PMother: PluginMetaData,
-        originalMD: com,
-      };
-      makeData(prompt);
-    }
-
-    function makeData(prompt) {
-      const positive = prompt.positive;
-      const negative = prompt.negative;
-      const others = prompt.others;
-      const PluginMetaData = prompt.PMother;
-
-      const Allothers = others.split(", ");
-      let NewOthers = "";
-      let UpscaledTo = "";
-
-      const UpscaleFound = Allothers.find((v) => v.includes("upscale"));
-
-      for (var i = 0; i < Allothers.length; i++) {
-        let oother = Allothers[i].split(":");
-        let escapedsecondpart = "";
-        if (oother[1]) {
-          escapedsecondpart = Encode(oother[1]);
-        } else {
-          escapedsecondpart = oother[1];
-        }
-
-        let IMGOW = document.getElementById("thisimg").naturalWidth;
-        let IMGOH = document.getElementById("thisimg").naturalHeight;
-        if (oother[0] == "Size" && UpscaleFound) {
-          UpscaledTo = " <span>[&nearr; " + IMGOW + "x" + IMGOH + "]</span>";
-        } else {
-          UpscaledTo = "";
-        }
-
-        NewOthers =
-          NewOthers +
-          "<span><strong>" +
-          oother[0] +
-          "</strong>" +
-          escapedsecondpart +
-          UpscaledTo +
-          "</span>";
-      }
-
-      let MDOut = "";
-      if (positive) {
-        MDOut = MDOut + "<p><strong>Prompt</strong><br>" + positive + "</p>";
-      }
-      if (negative) {
-        MDOut =
-          MDOut + "<p><strong>Negative Prompt</strong><br>" + negative + "</p>";
-      }
-      if (NewOthers) {
-        MDOut = MDOut + "<p>" + NewOthers + "</p>";
-      }
-      if (PluginMetaData) {
-        MDOut =
-          MDOut +
-          "<p><strong>Other Metadata</strong><br>" +
-          PluginMetaData +
-          "</p>";
-      }
-
-      let copymetadataprompt =
-        '<span id="copyprompt">' +
-        Encode(prompt.originalMD) +
-        '</span><button id="copypromptbutton">Copy Prompt</button>';
-
-      allMetaData.innerHTML = MDOut + copymetadataprompt;
-
-      document
-        .getElementById("copypromptbutton")
-        .addEventListener("click", function (e) {
-          var inp = document.createElement("textarea");
-          var txt = document.getElementById("copyprompt").innerText;
-          document.body.appendChild(inp);
-          inp.value = txt;
-          inp.select();
-          document.execCommand("copy", false);
-          inp.remove();
-          showSnackBar();
-        });
-    }
-
-    function extractPositivePrompt(text) {
-      try {
-        let matchtext =
-          text.match(/([^]+)Negative prompt: /) ||
-          text.match(/([^]+)Steps: /) ||
-          text.match(/([^]+){"steps"/) ||
-          text.match(/([^]+)\[[^[]+\]/);
-        return matchtext[1];
-      } catch (e) {
-        return "";
-      }
-    }
-
-    function extractNegativePrompt(text) {
-      // removed b/c false negative from checkpoint name in square braces -> || text.match(/\[([^[]+)\]/)
-      try {
-        let matchtext =
-          text.match(/Negative prompt: ([^]+)Steps: /) ||
-          text.match(/"uc": "([^]+)"}/);
-        return matchtext[1];
-      } catch (e) {
-        return "";
-      }
-    }
-
-    function extractOthers(text) {
-      try {
-        let matchtext =
-          text.match(/(Steps: [^]+)/) ||
-          text.match(/{("steps"[^]+)"uc": /) ||
-          text.match(/\]([^]+)/);
-
-        //in case there is more after the positive/negative and steps part, we check for line breaks
-        var separateLines = matchtext[1].match(/[^\r\n]+/g);
-        //return matchtext[1];
-        return separateLines[0];
-      } catch (e) {
-        return text;
-      }
-    }
-
-    function extractPluginData(text) {
-      try {
-        let matchtext =
-          text.match(/(Steps: [^]+)/) ||
-          text.match(/{("steps"[^]+)"uc": /) ||
-          text.match(/\]([^]+)/);
-
-        var separateLines = matchtext[1].match(/[^\r\n]+/g);
-        let returnthis = "";
-        separateLines.slice(1).forEach(function (value) {
-          //build output without first
-          returnthis = returnthis + value;
-        });
-        return returnthis;
-      } catch (e) {
-        return text;
-      }
     }
   }
 });

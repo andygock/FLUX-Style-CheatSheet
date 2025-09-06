@@ -1,0 +1,3 @@
+# temp ignore during development
+img/flux/*
+scripts/*

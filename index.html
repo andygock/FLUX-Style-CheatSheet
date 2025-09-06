@@ -2,23 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Stable Diffusion 1.5 - Cheat Sheet</title>
+    <title>FLUX.1 [dev] - Cheat Sheet</title>
     <link href="./img/other/favicon.ico" rel="icon" type="image/x-icon" />
     <link href="./src/style.css" rel="stylesheet" />
     <script src="./src/lazyload.min.js"></script>
-    <script src="./src/exif-reader.js"></script>
-    <script src="./src/data.js"></script>
+    <script src="./src/data.js" type="module"></script>
     <script src="./src/data-excluded-artists.js"></script>
-    <script src="./src/spaghetticode.js"></script>
+    <script src="./src/spaghetticode.js" type="module"></script>
   </head>
   <body>
     <header>
-      <h1>Stable Diffusion 1.5 - Cheat Sheet</h1>
+      <h1>FLUX.1 [dev] - Cheat Sheet</h1>
 
       <nav>
         <ul>
           <li><a class="mbut" data-page="styles" href="#">Styles</a></li>
-          <li><a class="mbut" data-page="info" href="#">Metadata</a></li>
           <li><a class="mbut" data-page="notes" href="#">Notes</a></li>
           <li><a class="mbut" data-page="about" href="#">About</a></li>
         </ul>
@@ -47,41 +45,17 @@
     <section id="styles">
       <h3>Artist Inspired Styles <span id="searchinfo"></span></h3>
       <p>
-        A collection of what Stable Diffusion imagines these artists' styles
-        look like.
+        A collection of what FLUX.1 [dev] imagines these artists' styles look
+        like.
       </p>
       <p>
         While having an overview is helpful, keep in mind that these styles only
         imitate certain aspects of the artist's work (color, medium, location,
-        etc.). They are limited by the rather superficial knowledge of SD, but
-        can probably give you a good base for your own creations.
+        etc.). They are limited by the rather superficial knowledge of FLUX.1,
+        but can probably give you a good base for your own creations.
       </p>
       <div id="allthestyles"></div>
       <div id="notavail"></div>
-    </section>
-
-    <section id="info">
-      <h3>Image Metadata</h3>
-
-      <p>This will check an image for embedded Stable Diffusion data.</p>
-
-      <div id="metadataboxes">
-        <div id="drop-area">
-          <span id="clearimage">&times;</span>
-          <form id="my-form">
-            <p>Drop Image Here</p>
-            <input
-              type="file"
-              id="fileElem"
-              accept="image/*"
-              onchange="handleFiles(this.files)"
-            />
-          </form>
-          <div id="gallery"></div>
-        </div>
-
-        <div id="allMetaData"></div>
-      </div>
     </section>
 
     <section id="notes">
@@ -354,75 +328,6 @@
           <figcaption class="copyme">Marble Bust</figcaption>
         </figure>
       </div>
-
-      <h3>Image Dimensions</h3>
-
-      <p>
-        Stable Diffusion was trained with base dimensions of 512 pixels (SD 1.5)
-        and 768 pixels (SD 2/2.1).<br />While it's not necessary to stick to
-        multiples of 128, it's a good place to start.
-      </p>
-      <div class="numberline">
-        <span>128</span><span>256</span><span>384</span
-        ><span class="highlight">512</span><span>640</span
-        ><span class="highlight">768</span><span>896</span><span>1024</span>
-      </div>
-
-      <p><strong>Some of the common ratios in SD dimensions:</strong></p>
-      <table id="dimensions">
-        <tr>
-          <td>Square</td>
-          <td>1:1</td>
-          <td id="ir1b1">512 &times; 512</td>
-        </tr>
-        <tr>
-          <td>Photo</td>
-          <td>2:3</td>
-          <td id="ir2b3">512 &times; 768</td>
-        </tr>
-        <tr>
-          <td>Photo</td>
-          <td>3:4</td>
-          <td id="ir3b4">512 &times; 683</td>
-        </tr>
-        <tr>
-          <td>Social Media</td>
-          <td>4:5</td>
-          <td id="ir4b5">512 &times; 640</td>
-        </tr>
-        <tr>
-          <td>Standard Monitor</td>
-          <td>16:9</td>
-          <td id="ir16b9">910 &times; 512</td>
-        </tr>
-        <tr>
-          <td>Monitor</td>
-          <td>16:10</td>
-          <td id="ir16b10">819 &times; 512</td>
-        </tr>
-        <tr>
-          <td>UltraWide Monitor</td>
-          <td>21:9</td>
-          <td id="ir21b9">1195 &times; 512</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="nobgr"></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><label for="ratiobox">Base size</label></td>
-          <td class="nobgr">
-            <input
-              type="search"
-              id="ratiobox"
-              placeholder="Base Size"
-              value="512"
-            />
-          </td>
-          <td></td>
-        </tr>
-      </table>
 
       <h3>Art History - Some Pointers</h3>
 
@@ -698,17 +603,9 @@
         Code from Himuro-Majika's
         <a
           href="https://github.com/himuro-majika/Stable_Diffusion_image_metadata_viewer"
-          >Stable Diffusion image metadata viewer</a
+          >FLUX.1 [dev] image metadata viewer</a
         >
         browser extension
-      </p>
-      <p>
-        Reading metadata with
-        <a href="https://github.com/mattiasw/ExifReader">ExifReader</a>, extra
-        search results supported by
-        <a href="https://github.com/aceakash/string-similarity"
-          >String-Similarity</a
-        >
       </p>
       <p>
         <a href="https://github.com/verlok/vanilla-lazyload">Lazyload Script</a>
@@ -719,36 +616,14 @@
       <p>
         Automatic1111 for the
         <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui"
-          >Stable Diffusion Web UI</a
+          >FLUX.1 [dev] Web UI</a
         >
       </p>
       <p>
-        Stable Diffusion by
-        <a href="https://ommer-lab.com/research/latent-diffusion-models/"
-          >LMU</a
-        >
-        and <a href="https://stability.ai/">stability.ai</a>
+        FLUX.1 [dev] by
+        <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev">LMU</a>
+        and <a href="https://bfl.ai/">Black Forest Labs</a>
       </p>
-
-      <h3>Useful Links</h3>
-
-      <p>
-        Links that helped me understand the technical side of Stable Diffusion
-        (no affiliation):
-      </p>
-
-      <ul>
-        <li>
-          <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki"
-            >Automatic111 Wiki</a
-          >
-        </li>
-        <li>
-          <a href="https://stable-diffusion-art.com/tutorials/"
-            >Stable-Diffusion-Art.com - Tutorials</a
-          >
-        </li>
-      </ul>
 
       <h3>Errors</h3>
 
