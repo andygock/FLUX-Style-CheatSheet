@@ -4,7 +4,7 @@
 //
 // Run with:
 //   cd scripts
-//   node generate-artists.js > artists.txt
+//   node generate-artists.js | Out-File -FilePath styles.txt -Encoding ascii
 //
 
 import fs from "fs";

@@ -6,7 +6,7 @@
 //   node generate-prompts.js > prompts.txt
 //
 // In PS:
-//   node generate-prompts.js | Out-File -FilePath prompts.txt -Encoding UTF8
+//   node generate-prompts.js | Out-File -FilePath prompts.txt -Encoding ascii
 
 import fs from "fs";
 import path from "path";

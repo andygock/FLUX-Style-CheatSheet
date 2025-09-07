@@ -11823,12 +11823,11 @@ const dataOriginal = [
 //
 const data = dataOriginal.map((item) => {
   const formattedName = formatName(item.Name);
-  const normalizedName = normalizeUnicode(formattedName);
-  const originalPrompt = item.Prompt;
+  // const normalizedName = normalizeUnicode(formattedName);
   return {
     ...item,
     Image: normalizeUnicode(item.Prompt) + ".webp",
-    Prompt: `style of ${normalizedName}`,
+    Prompt: `style of ${item.Prompt}`,
     Checkpoint: "flux1-dev-fp8",
   };
 });

@@ -2,7 +2,7 @@
 //   node generate-styles.js > styles.txt
 //
 //  In PS:
-//   node generate-styles.js | Out-File -FilePath styles.txt -Encoding UTF8
+//    node generate-styles.js | Out-File -FilePath styles.txt -Encoding ascii
 //
 
 import fs from "fs";

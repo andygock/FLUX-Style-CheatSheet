@@ -4,7 +4,7 @@
 
 Forked from [Stable Diffusion Cheat-Sheet](https://github.com/SupaGruen/StableDiffusion-CheatSheet) by SupaGruen - many thanks for the great work! Work in progress to convert it to FLUX.1 [dev] artists and styles. This is generated with a simple prompt "style of [artist name]". I used ComfyUI with FLUX.1 Dev fp8 diffusion model with TeaCache and 20 steps.
 
-They have not been manually checked yet, so please be aware that some of the images may not represent the artist's style accurately. I will update this over time.
+They have not been manually checked yet, so please be aware that some of the images may not represent the artist's style accurately, at times they look nothing like the artist at all.
 
 This began as a personal collection of styles and notes. I was curious to see how the artists used in the prompts looked without the other keywords.
 
@@ -12,7 +12,7 @@ This began as a personal collection of styles and notes. I was curious to see ho
 
 ## Artist Inspired Styles
 
-- **Over 833 manually tested styles**
+- **Over 833 <strike>manually tested</strike> styles**
 - Copy the style prompt with one click
 - Search and filter
 - One click to look up the artist via search engine
