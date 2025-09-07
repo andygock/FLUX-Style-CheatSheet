@@ -1,5 +1,4 @@
 # temp ignore during development
-img/flux/*
 *.tmp.*
 tmp/*
 scripts/*.txt

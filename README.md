@@ -1,6 +1,6 @@
 # FLUX.1 [dev] Cheat-Sheet
 
-🛑 Notice: This is a **work in progress**. It will not work as I have not generated the images yet.
+🛑 Notice: This is a **work in progress**.
 
 Forked from [Stable Diffusion Cheat-Sheet](https://github.com/SupaGruen/StableDiffusion-CheatSheet) by SupaGruen - many thanks for the great work! Work in progress to convert it to FLUX.1 [dev] artists and styles. This is generated with a simple prompt "style of [artist name]". I used ComfyUI with FLUX.1 Dev fp8 diffusion model with TeaCache and 20 steps.
 
