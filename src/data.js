@@ -1445,7 +1445,7 @@ const dataOriginal = [
     Name: "Blair, Mary",
     Born: "1911",
     Death: "1978",
-    Prompt: "style of Mary Blair ",
+    Prompt: "style of Mary Blair",
     NPrompt: "",
     Category: "Illustration, Disney, USA",
     Extrainfo: "512px + Highres. Fix, DPM2, 40 Steps",
@@ -8505,10 +8505,10 @@ const dataOriginal = [
   },
   {
     Type: "1",
-    Name: "O\u2019Keeffe, Georgia",
+    Name: "O'Keeffe, Georgia",
     Born: "1887",
     Death: "1986",
-    Prompt: "style of Georgia O\u2019Keeffe",
+    Prompt: "style of Georgia O'Keeffe",
     NPrompt: "",
     Category: "Painting, Oil, USA",
     Extrainfo: "",
@@ -11818,6 +11818,9 @@ const dataOriginal = [
 
 // make a copy called 'data', but change Image filename to new one
 // e.g Prompt of "style of Ignacio Zuloaga" becomes "Ignacio Zuloaga.webp"
+//
+// assume globals exist: formatName, normalizeUnicode
+//
 const data = dataOriginal.map((item) => {
   const formattedName = formatName(item.Name);
   const normalizedName = normalizeUnicode(formattedName);

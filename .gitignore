@@ -2,3 +2,4 @@
 img/flux/*
 *.tmp.*
 tmp/*
+scripts/*.txt
