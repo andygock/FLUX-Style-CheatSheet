@@ -259,10 +259,29 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // Lightbox functionality
   let preventScroll = (e) => e.preventDefault();
 
-  function openLightbox(imgSrc, infoHtml = "") {
+  function openLightbox(imgSrc, infoHtml = "", index = null) {
     document.getElementById("lightbox-img").src = imgSrc;
     if (infoHtml) {
       document.getElementById("lightbox-info").innerHTML = infoHtml;
+      // Attach copy listener to the copyme element in lightbox
+      const lightboxCopyme = document.querySelector("#lightbox-info .copyme");
+      if (lightboxCopyme) {
+        addcopylistener([lightboxCopyme]);
+      }
+      // Attach star listener if index is provided
+      if (index !== null) {
+        const lightboxStarthis = document.querySelector(
+          "#lightbox-info .starthis"
+        );
+        if (lightboxStarthis) {
+          lightboxStarthis.addEventListener("click", function (e) {
+            e.preventDefault();
+            let starbutstyledata = data[index].Creation;
+            starfunction(starbutstyledata);
+            this.classList.toggle("stared");
+          });
+        }
+      }
     }
     const scrollY = window.scrollY;
     document.body.classList.add("lightbox-open");
@@ -340,19 +359,39 @@ document.addEventListener("DOMContentLoaded", function (event) {
   function addcopylistener(e, f) {
     for (var i = 0; i < e.length; i++) {
       let currentspan = e[i];
-      currentspan.addEventListener("click", function () {
-        var inp = document.createElement("input");
-        document.body.appendChild(inp);
+      currentspan.addEventListener("click", async function () {
         if (f == "no") {
           var alttxt = this.title;
         } else {
           var alttxt = this.innerText;
         }
-        inp.value = alttxt;
-        inp.select();
-        document.execCommand("copy", false);
-        inp.remove();
-        showSnackBar();
+
+        try {
+          // Try modern Clipboard API first
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(alttxt);
+            showSnackBar();
+          } else {
+            // Fallback for older browsers
+            var inp = document.createElement("input");
+            document.body.appendChild(inp);
+            inp.value = alttxt;
+            inp.select();
+            document.execCommand("copy", false);
+            inp.remove();
+            showSnackBar();
+          }
+        } catch (err) {
+          console.error("Failed to copy text: ", err);
+          // Fallback for browsers that don't support clipboard API
+          var inp = document.createElement("input");
+          document.body.appendChild(inp);
+          inp.value = alttxt;
+          inp.select();
+          document.execCommand("copy", false);
+          inp.remove();
+          showSnackBar();
+        }
       });
     }
   }
@@ -394,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const imgSrc = this.dataset.bg;
         const index = this.dataset.index;
         const infoHtml = buildStyleInfo(index);
-        openLightbox(imgSrc, infoHtml);
+        openLightbox(imgSrc, infoHtml, index);
         this.blur();
       });
     }
@@ -483,26 +522,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
           const imgSrc = pod.dataset.bg;
           const index = pod.dataset.index;
           const infoHtml = buildStyleInfo(index);
-          openLightbox(imgSrc, infoHtml);
+          openLightbox(imgSrc, infoHtml, index);
           pod.blur();
-          // Add event listeners for lightbox elements
-          const lightboxCopyme = document.querySelector(
-            "#lightbox-info .copyme"
-          );
-          if (lightboxCopyme) {
-            addcopylistener([lightboxCopyme]);
-          }
-          const lightboxStarthis = document.querySelector(
-            "#lightbox-info .starthis"
-          );
-          if (lightboxStarthis) {
-            lightboxStarthis.addEventListener("click", function (e) {
-              e.preventDefault();
-              let starbutstyledata = data[index].Creation;
-              starfunction(starbutstyledata);
-              this.classList.toggle("stared");
-            });
-          }
         }
       }
     }
