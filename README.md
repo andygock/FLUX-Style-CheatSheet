@@ -31,6 +31,7 @@ There, you'll find everything that's in the JSON data. Date of birth (and death,
 
 From JS file or borrowed code to font and icons, thank you to:
 
-- Vanilla LazyLoad (MIT) - https://github.com/verlok/vanilla-lazyload
-- Google Font Roboto (Apache-2.0) - https://fonts.google.com/specimen/Roboto
-- SVG Icons from Ionicons (MIT) - https://github.com/ionic-team/ionicons
+- [Stable Diffusion Cheat-Sheet](https://github.com/SupaGruen/StableDiffusion-CheatSheet) by SupaGruen
+- [Vanilla LazyLoad (MIT)](https://github.com/verlok/vanilla-lazyload)
+- [Google Font Roboto (Apache-2.0)](https://fonts.google.com/specimen/Roboto)
+- [SVG Icons from Ionicons (MIT)](https://github.com/ionic-team/ionicons)
