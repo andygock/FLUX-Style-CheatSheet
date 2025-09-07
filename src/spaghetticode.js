@@ -284,52 +284,58 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // Lightbox functionality
   let preventScroll = (e) => e.preventDefault();
 
+  function openLightbox(imgSrc, infoHtml = "") {
+    document.getElementById("lightbox-img").src = imgSrc;
+    if (infoHtml) {
+      document.getElementById("lightbox-info").innerHTML = infoHtml;
+    }
+    const scrollY = window.scrollY;
+    document.body.classList.add("lightbox-open");
+    document.body.style.top = `-${scrollY}px`;
+    const lightbox = document.getElementById("lightbox");
+    lightbox.classList.add("show");
+    document.addEventListener("wheel", preventScroll, { passive: false });
+    document.addEventListener("touchmove", preventScroll, { passive: false });
+  }
+
+  function closeLightbox() {
+    const scrollY = parseInt(document.body.style.top || "0");
+    document.body.classList.remove("lightbox-open");
+    document.body.style.top = "";
+    window.scrollTo(0, -scrollY);
+    const lightbox = document.getElementById("lightbox");
+    lightbox.classList.remove("show");
+    document.getElementById("lightbox-info").innerHTML = "";
+    document.removeEventListener("wheel", preventScroll);
+    document.removeEventListener("touchmove", preventScroll);
+  }
+
   document.querySelectorAll(".zoomimg").forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
+      if (document.getElementById("lightbox").classList.contains("show")) {
+        // If lightbox is open, let the link open in new tab
+        window.open(this.href, '_blank');
+        return;
+      }
       const imgSrc = this.href;
-      document.getElementById("lightbox-img").src = imgSrc;
-      document.getElementById("lightbox").style.display = "flex";
+      openLightbox(imgSrc);
     });
   });
 
   document.getElementById("lightbox-close").addEventListener("click", () => {
-    const scrollY = parseInt(document.body.style.top || "0");
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, -scrollY);
-    document.getElementById("lightbox").style.display = "none";
-    document.getElementById("lightbox-info").innerHTML = "";
-    document.removeEventListener("wheel", preventScroll);
-    document.removeEventListener("touchmove", preventScroll);
+    closeLightbox();
   });
 
   document.getElementById("lightbox").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) {
-      const scrollY = parseInt(document.body.style.top || "0");
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, -scrollY);
-      document.getElementById("lightbox").style.display = "none";
-      document.getElementById("lightbox-info").innerHTML = "";
-      document.removeEventListener("wheel", preventScroll);
-      document.removeEventListener("touchmove", preventScroll);
+      closeLightbox();
     }
   });
 
   document.getElementById("lightbox-img").addEventListener("click", (e) => {
     e.stopPropagation();
-    const scrollY = parseInt(document.body.style.top || "0");
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, -scrollY);
-    document.getElementById("lightbox").style.display = "none";
-    document.getElementById("lightbox-info").innerHTML = "";
-    document.removeEventListener("wheel", preventScroll);
-    document.removeEventListener("touchmove", preventScroll);
+    closeLightbox();
   });
 
   // Create filter tags
@@ -414,54 +420,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         // Open lightbox with the full image and info
         const scrollY = window.scrollY;
-        document.body.style.position = "fixed";
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = "100%";
         const imgSrc = this.dataset.bg;
         const index = this.dataset.index;
         const infoHtml = buildStyleInfo(index);
-        document.getElementById("lightbox-img").src = imgSrc;
-        document.getElementById("lightbox-info").innerHTML = infoHtml;
-        document.getElementById("lightbox").style.display = "flex";
+        openLightbox(imgSrc, infoHtml);
         this.blur();
-        document.addEventListener("wheel", preventScroll, { passive: false });
-        document.addEventListener("touchmove", preventScroll, {
-          passive: false,
-        });
-
-        // Add event listeners for lightbox elements
-        const lightboxCopyme = document.querySelector("#lightbox-info .copyme");
-        if (lightboxCopyme) {
-          addcopylistener([lightboxCopyme]);
-        }
-        const lightboxStarthis = document.querySelector(
-          "#lightbox-info .starthis"
-        );
-        if (lightboxStarthis) {
-          lightboxStarthis.addEventListener("click", function (e) {
-            e.preventDefault();
-            let starbutstyledata = data[index].Creation;
-            starfunction(starbutstyledata);
-            this.classList.toggle("stared");
-          });
-        }
-
-        // Anchor in url bar
-        var getnewanker = e.target.id; // hehe
-
-        if (!getnewanker) {
-          const url = window.location.href.replace(/#.*/, "");
-          history.replaceState({}, "", url);
-        } else {
-          const url =
-            window.location.href.replace(/#.*/, "") + "#" + getnewanker;
-          history.replaceState({}, "", url);
-        }
-
-        let thishash = window.location.hash;
-        if (thishash) {
-          location.hash = thishash;
-        }
       });
     }
   }
@@ -469,16 +432,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // Close lightbox on Escape key press
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-      if (document.getElementById("lightbox").style.display === "flex") {
-        const scrollY = parseInt(document.body.style.top || "0");
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        window.scrollTo(0, -scrollY);
-        document.getElementById("lightbox").style.display = "none";
-        document.getElementById("lightbox-info").innerHTML = "";
-        document.removeEventListener("wheel", preventScroll);
-        document.removeEventListener("touchmove", preventScroll);
+      if (document.getElementById("lightbox").classList.contains("show")) {
+        closeLightbox();
         return;
       }
       // Remove hash from URL
@@ -486,16 +441,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
       history.replaceState({}, "", url);
     } else if (e.key.toLowerCase() === "z") {
       const lightbox = document.getElementById("lightbox");
-      if (lightbox.style.display === "flex") {
-        const scrollY = parseInt(document.body.style.top || "0");
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        window.scrollTo(0, -scrollY);
-        lightbox.style.display = "none";
-        document.getElementById("lightbox-info").innerHTML = "";
-        document.removeEventListener("wheel", preventScroll);
-        document.removeEventListener("touchmove", preventScroll);
+      if (lightbox.classList.contains("show")) {
+        closeLightbox();
       }
     }
   });
@@ -565,18 +512,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
           const imgSrc = pod.dataset.bg;
           const index = pod.dataset.index;
           const infoHtml = buildStyleInfo(index);
-          document.getElementById("lightbox-img").src = imgSrc;
-          document.getElementById("lightbox-info").innerHTML = infoHtml;
-          document.getElementById("lightbox").style.display = "flex";
-          document.body.style.position = "fixed";
-          document.body.style.top = `-${scrollY}px`;
-          document.body.style.width = "100%";
+          openLightbox(imgSrc, infoHtml);
           pod.blur();
-          document.addEventListener("wheel", preventScroll, { passive: false });
-          document.addEventListener("touchmove", preventScroll, {
-            passive: false,
-          });
-
           // Add event listeners for lightbox elements
           const lightboxCopyme = document.querySelector(
             "#lightbox-info .copyme"
@@ -635,75 +572,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // Fill Search Array for Similar Names + Not Available Artists
   // https://github.com/aceakash/string-similarity
-  !(function (t, e) {
-    "object" == typeof exports && "object" == typeof module
-      ? (module.exports = e())
-      : "function" == typeof define && define.amd
-      ? define([], e)
-      : "object" == typeof exports
-      ? (exports.stringSimilarity = e())
-      : (t.stringSimilarity = e());
-  })(self, function () {
-    return (
-      (t = {
-        138: (t) => {
-          function e(t, e) {
-            if ((t = t.replace(/\s+/g, "")) === (e = e.replace(/\s+/g, "")))
-              return 1;
-            if (t.length < 2 || e.length < 2) return 0;
-            let r = new Map();
-            for (let e = 0; e < t.length - 1; e++) {
-              const n = t.substring(e, e + 2),
-                o = r.has(n) ? r.get(n) + 1 : 1;
-              r.set(n, o);
-            }
-            let n = 0;
-            for (let t = 0; t < e.length - 1; t++) {
-              const o = e.substring(t, t + 2),
-                s = r.has(o) ? r.get(o) : 0;
-              s > 0 && (r.set(o, s - 1), n++);
-            }
-            return (2 * n) / (t.length + e.length - 2);
-          }
-          t.exports = {
-            compareTwoStrings: e,
-            findBestMatch: function (t, r) {
-              if (
-                !(function (t, e) {
-                  return (
-                    "string" == typeof t &&
-                    !!Array.isArray(e) &&
-                    !!e.length &&
-                    !e.find(function (t) {
-                      return "string" != typeof t;
-                    })
-                  );
-                })(t, r)
-              )
-                throw new Error(
-                  "Bad arguments: First argument should be a string, second should be an array of strings"
-                );
-              const n = [];
-              let o = 0;
-              for (let s = 0; s < r.length; s++) {
-                const i = r[s],
-                  f = e(t, i);
-                n.push({ target: i, rating: f }), f > n[o].rating && (o = s);
-              }
-              return { ratings: n, bestMatch: n[o], bestMatchIndex: o };
-            },
-          };
-        },
-      }),
-      (e = {}),
-      (function r(n) {
-        if (e[n]) return e[n].exports;
-        var o = (e[n] = { exports: {} });
-        return t[n](o, o.exports, r), o.exports;
-      })(138)
-    );
-    var t, e;
-  });
+  // Moved to separate file string-similarity.js
 
   var searcharray = [];
   var simplearray = [];
