@@ -8,7 +8,7 @@ They have not been manually checked yet, so please be aware that some of the ima
 
 This began as a personal collection of styles and notes. I was curious to see how the artists used in the prompts looked without the other keywords.
 
-[Download the zip file](https://github.com/SupaGruen/StableDiffusion-CheatSheet/releases) and use it as your own personal cheat-sheet - **completely offline**.
+[Download the zip file](https://github.com/andygock/FLUX-CheatSheet/archive/refs/heads/main.zip) and use it as your own personal cheat-sheet - **completely offline**.
 
 ## Artist Inspired Styles
 
