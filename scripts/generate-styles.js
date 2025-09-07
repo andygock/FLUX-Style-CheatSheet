@@ -1,5 +1,9 @@
 // example usage:
 //   node generate-styles.js > styles.txt
+//
+//  In PS:
+//   node generate-styles.js | Out-File -FilePath styles.txt -Encoding UTF8
+//
 
 import fs from "fs";
 
@@ -13,6 +17,10 @@ const styles = [];
 
 // Extract all matches
 while ((match = figcaptionRegex.exec(html)) !== null) {
+  // if there is unicode, halt
+  if (/[^ -~]/.test(match[1])) {
+    throw new Error(`Non-UTF-8 character found in style: ${match[1]}`);
+  }
   styles.push(match[1]);
 }
 

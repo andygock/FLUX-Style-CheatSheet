@@ -5,6 +5,8 @@
 //   cd scripts
 //   node generate-prompts.js > prompts.txt
 //
+// In PS:
+//   node generate-prompts.js | Out-File -FilePath prompts.txt -Encoding UTF8
 
 import fs from "fs";
 import path from "path";
@@ -52,9 +54,7 @@ data.forEach((artist) => {
   // check and warn if there is any non utf-8 character left
   if (/[^ -~]/.test(artist.PromptNew)) {
     // Output warning to stderr
-    console.error(
-      `Warning: Non-UTF-8 character found in prompt for artist ${artist.Name}: ${artist.PromptNew}`
-    );
+    throw new `Warning: Non-UTF-8 character found in prompt for artist ${artist.Name}: ${artist.PromptNew}`();
   }
   console.log(artist.PromptNew);
 });
