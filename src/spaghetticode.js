@@ -282,6 +282,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   searchInput.placeholder = "Search " + countstyles + " Styles";
 
   // Lightbox functionality
+  let preventScroll = (e) => e.preventDefault();
+
   document.querySelectorAll(".zoomimg").forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -292,21 +294,42 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   document.getElementById("lightbox-close").addEventListener("click", () => {
+    const scrollY = parseInt(document.body.style.top || "0");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, -scrollY);
     document.getElementById("lightbox").style.display = "none";
     document.getElementById("lightbox-info").innerHTML = "";
+    document.removeEventListener("wheel", preventScroll);
+    document.removeEventListener("touchmove", preventScroll);
   });
 
   document.getElementById("lightbox").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) {
+      const scrollY = parseInt(document.body.style.top || "0");
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, -scrollY);
       document.getElementById("lightbox").style.display = "none";
       document.getElementById("lightbox-info").innerHTML = "";
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
     }
   });
 
   document.getElementById("lightbox-img").addEventListener("click", (e) => {
     e.stopPropagation();
+    const scrollY = parseInt(document.body.style.top || "0");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, -scrollY);
     document.getElementById("lightbox").style.display = "none";
     document.getElementById("lightbox-info").innerHTML = "";
+    document.removeEventListener("wheel", preventScroll);
+    document.removeEventListener("touchmove", preventScroll);
   });
 
   // Create filter tags
@@ -390,12 +413,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
 
         // Open lightbox with the full image and info
+        const scrollY = window.scrollY;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = "100%";
         const imgSrc = this.dataset.bg;
         const index = this.dataset.index;
         const infoHtml = buildStyleInfo(index);
         document.getElementById("lightbox-img").src = imgSrc;
         document.getElementById("lightbox-info").innerHTML = infoHtml;
         document.getElementById("lightbox").style.display = "flex";
+        this.blur();
+        document.addEventListener("wheel", preventScroll, { passive: false });
+        document.addEventListener("touchmove", preventScroll, {
+          passive: false,
+        });
 
         // Add event listeners for lightbox elements
         const lightboxCopyme = document.querySelector("#lightbox-info .copyme");
@@ -419,11 +451,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         if (!getnewanker) {
           const url = window.location.href.replace(/#.*/, "");
-          history.pushState({}, "", url);
+          history.replaceState({}, "", url);
         } else {
           const url =
             window.location.href.replace(/#.*/, "") + "#" + getnewanker;
-          history.pushState({}, "", url);
+          history.replaceState({}, "", url);
         }
 
         let thishash = window.location.hash;
@@ -438,18 +470,32 @@ document.addEventListener("DOMContentLoaded", function (event) {
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       if (document.getElementById("lightbox").style.display === "flex") {
+        const scrollY = parseInt(document.body.style.top || "0");
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, -scrollY);
         document.getElementById("lightbox").style.display = "none";
         document.getElementById("lightbox-info").innerHTML = "";
+        document.removeEventListener("wheel", preventScroll);
+        document.removeEventListener("touchmove", preventScroll);
         return;
       }
       // Remove hash from URL
       const url = window.location.href.replace(/#.*/, "");
-      history.pushState({}, "", url);
+      history.replaceState({}, "", url);
     } else if (e.key.toLowerCase() === "z") {
       const lightbox = document.getElementById("lightbox");
       if (lightbox.style.display === "flex") {
+        const scrollY = parseInt(document.body.style.top || "0");
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, -scrollY);
         lightbox.style.display = "none";
         document.getElementById("lightbox-info").innerHTML = "";
+        document.removeEventListener("wheel", preventScroll);
+        document.removeEventListener("touchmove", preventScroll);
       }
     }
   });
@@ -522,6 +568,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
           document.getElementById("lightbox-img").src = imgSrc;
           document.getElementById("lightbox-info").innerHTML = infoHtml;
           document.getElementById("lightbox").style.display = "flex";
+          document.body.style.position = "fixed";
+          document.body.style.top = `-${scrollY}px`;
+          document.body.style.width = "100%";
+          pod.blur();
+          document.addEventListener("wheel", preventScroll, { passive: false });
+          document.addEventListener("touchmove", preventScroll, {
+            passive: false,
+          });
 
           // Add event listeners for lightbox elements
           const lightboxCopyme = document.querySelector(
