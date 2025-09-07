@@ -949,21 +949,153 @@ dialog div button#stylesDialogConfirm:hover {
   background-color: rgba(0, 0, 0, 0.8);
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
+#lightbox-content {
+  display: flex;
+  background-color: var(--dgr);
+  border-radius: 5px;
+  overflow: hidden;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
 }
 
-#lightbox-close {
+#lightbox-info {
+  width: 256px;
+  padding: 20px;
+  color: var(--ow);
+  background-color: var(--dgr);
+}
+#lightbox-info .styleinfo {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  background-color: var(--dgr);
+}
+#lightbox-info .styleinfo .more {
+  display: block;
+}
+#lightbox-info .styleinfo .more .category {
+  margin: 10px 0 0 0;
+  max-height: none;
+  overflow: visible;
+  line-height: 1;
+  font-size: inherit;
+}
+#lightbox-info .styleinfo .more .category span {
+  display: inline-block;
+  margin: 0 3px 3px 0;
+  padding: 3px 4px 3px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dgr);
+  background-color: var(--lblgr);
+}
+#lightbox-info .styleinfo .more .category span.checkpointname {
+  background-color: var(--mutedwhite);
+}
+#lightbox-info .clicklinks {
+  display: inline-block;
+  position: initial;
+  bottom: auto;
+}
+#lightbox-info .styleinfo .more .extralinks {
+  margin: 10px 0 15px 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+#lightbox-info .styleinfo .more fieldset {
+  margin: 10px 0 0 0;
+  padding: 0;
+  width: 100%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+#lightbox-info .styleinfo .more fieldset:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+#lightbox-info .styleinfo .more fieldset legend {
+  margin: 0 0 3px 0;
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mutedwhite);
+}
+#lightbox-info .copyme {
+  display: block;
+  padding: 5px 7px 10px 7px;
+  cursor: copy;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  width: auto;
+}
+#lightbox-info .extralinks a {
+  position: relative;
+  display: inline-block;
+  height: 35px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  text-decoration: none;
+}
+#lightbox-info .extralinks a:nth-child(1) {
+  margin: 0 10px 0 0;
+  width: 82px;
+}
+#lightbox-info .extralinks a:nth-child(2) {
+  margin: 0 10px 0 0;
+  width: 97px;
+}
+#lightbox-info .extralinks a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+#lightbox-info .extralinks a.stared {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+#lightbox-info .extralinks a span {
   position: absolute;
-  top: 20px;
-  right: 30px;
-  color: #fff;
-  font-size: 40px;
-  font-weight: bold;
+  top: 10px;
+}
+#lightbox-info .extralinks a img {
+  padding: 5px;
+}
+#lightbox-info h3 {
+  margin: 0 0 10px 0;
+  padding: 0;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  text-shadow: none;
+  color: var(--ow);
+}
+#lightbox-img {
+  width: auto;
+  height: auto;
+  max-width: 1024px;
+  max-height: 1024px;
+  object-fit: contain;
   cursor: pointer;
-  z-index: 1001;
+}
+
+@media screen and (max-width: 1200px) {
+  #lightbox-content {
+    flex-direction: column;
+  }
+  #lightbox-info {
+    width: 100%;
+    padding: 10px;
+    flex-shrink: 0;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  #lightbox-img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+  }
 }

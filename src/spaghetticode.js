@@ -205,7 +205,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
           outputdata +
           '<div id="' +
           currentAnchor +
-          '" class="stylepod lazy" data-creatime="' +
+          '" class="stylepod lazy" data-index="' +
+          i +
+          '" data-creatime="' +
           data[i].Creation +
           '" data-bg="./img/' +
           imgSubDir +
@@ -291,12 +293,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById("lightbox-close").addEventListener("click", () => {
     document.getElementById("lightbox").style.display = "none";
+    document.getElementById("lightbox-info").innerHTML = "";
   });
 
   document.getElementById("lightbox").addEventListener("click", (e) => {
     if (e.target === e.currentTarget) {
       document.getElementById("lightbox").style.display = "none";
+      document.getElementById("lightbox-info").innerHTML = "";
     }
+  });
+
+  document.getElementById("lightbox-img").addEventListener("click", (e) => {
+    e.stopPropagation();
+    document.getElementById("lightbox").style.display = "none";
+    document.getElementById("lightbox-info").innerHTML = "";
   });
 
   // Create filter tags
@@ -323,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   FilterOutput =
     FilterOutput +
-    '<span class="specialfilters" data-srch="Newest Styles">Newest Styles</span><span class="specialfilters" data-srch="New Styles 1.2.0">New with 1.2.0</span><span class="specialfilters" data-srch="New Styles 1.1.0">New with 1.1.0</span><span class="specialfilters" data-srch="Opened Styles">Currently Opened Styles</span><span class="specialfilters" data-srch="Liked">Liked <span><img class="svg" src="./src/heart-outline.svg" width="12"></span></span><span class="specialfilters" data-srch="&dagger;">Only Deceased Artists <span>&dagger;</span></span>';
+    '<span class="specialfilters" data-srch="Newest Styles">Newest Styles</span><span class="specialfilters" data-srch="New Styles 1.2.0">New with 1.2.0</span><span class="specialfilters" data-srch="New Styles 1.1.0">New with 1.1.0</span><span class="specialfilters" data-srch="Liked">Liked <span><img class="svg" src="./src/heart-outline.svg" width="12"></span></span><span class="specialfilters" data-srch="&dagger;">Only Deceased Artists <span>&dagger;</span></span>';
   catsbox.innerHTML = FilterOutput;
 
   // Copy Prompt to Clipboard
@@ -378,14 +388,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
         ) {
           return;
         }
-        this.classList.toggle("active");
 
-        // Scroll to the expanded pod to keep the clicked area in view
-        setTimeout(() => {
-          this.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
+        // Open lightbox with the full image and info
+        const imgSrc = this.dataset.bg;
+        const index = this.dataset.index;
+        const infoHtml = buildStyleInfo(index);
+        document.getElementById("lightbox-img").src = imgSrc;
+        document.getElementById("lightbox-info").innerHTML = infoHtml;
+        document.getElementById("lightbox").style.display = "flex";
 
-        //Anchor in url bar
+        // Add event listeners for lightbox elements
+        const lightboxCopyme = document.querySelector("#lightbox-info .copyme");
+        if (lightboxCopyme) {
+          addcopylistener([lightboxCopyme]);
+        }
+        const lightboxStarthis = document.querySelector(
+          "#lightbox-info .starthis"
+        );
+        if (lightboxStarthis) {
+          lightboxStarthis.addEventListener("click", function (e) {
+            e.preventDefault();
+            let starbutstyledata = data[index].Creation;
+            starfunction(starbutstyledata);
+            this.classList.toggle("stared");
+          });
+        }
+
+        // Anchor in url bar
         var getnewanker = e.target.id; // hehe
 
         if (!getnewanker) {
@@ -405,17 +434,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 
-  // Close all open styles on Escape key press
+  // Close lightbox on Escape key press
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       if (document.getElementById("lightbox").style.display === "flex") {
         document.getElementById("lightbox").style.display = "none";
+        document.getElementById("lightbox-info").innerHTML = "";
         return;
       }
-      var activePods = document.querySelectorAll(".stylepod.active");
-      activePods.forEach(function (pod) {
-        pod.classList.remove("active");
-      });
       // Remove hash from URL
       const url = window.location.href.replace(/#.*/, "");
       history.pushState({}, "", url);
@@ -423,29 +449,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const lightbox = document.getElementById("lightbox");
       if (lightbox.style.display === "flex") {
         lightbox.style.display = "none";
-      } else {
-        const activePods = document.querySelectorAll(".stylepod.active");
-        if (activePods.length > 0) {
-          // Find the most visible active pod (topmost in viewport)
-          let visiblePods = [];
-          activePods.forEach((pod) => {
-            const rect = pod.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-              visiblePods.push({ pod, top: rect.top });
-            }
-          });
-          if (visiblePods.length > 0) {
-            visiblePods.sort((a, b) => a.top - b.top);
-            const imgSrc = visiblePods[0].pod.getAttribute("data-bg");
-            document.getElementById("lightbox-img").src = imgSrc;
-            lightbox.style.display = "flex";
-          } else {
-            // Fallback to first active pod if none visible
-            const imgSrc = activePods[0].getAttribute("data-bg");
-            document.getElementById("lightbox-img").src = imgSrc;
-            lightbox.style.display = "flex";
-          }
-        }
+        document.getElementById("lightbox-info").innerHTML = "";
       }
     }
   });
@@ -510,10 +514,34 @@ document.addEventListener("DOMContentLoaded", function (event) {
       let thishash = window.location.hash;
       let thishashnew = thishash.replace("#", "");
       if (thishash) {
-        let machaktiv = document
-          .getElementById(thishashnew)
-          .classList.add("active");
-        location.hash = thishash;
+        let pod = document.getElementById(thishashnew);
+        if (pod) {
+          const imgSrc = pod.dataset.bg;
+          const index = pod.dataset.index;
+          const infoHtml = buildStyleInfo(index);
+          document.getElementById("lightbox-img").src = imgSrc;
+          document.getElementById("lightbox-info").innerHTML = infoHtml;
+          document.getElementById("lightbox").style.display = "flex";
+
+          // Add event listeners for lightbox elements
+          const lightboxCopyme = document.querySelector(
+            "#lightbox-info .copyme"
+          );
+          if (lightboxCopyme) {
+            addcopylistener([lightboxCopyme]);
+          }
+          const lightboxStarthis = document.querySelector(
+            "#lightbox-info .starthis"
+          );
+          if (lightboxStarthis) {
+            lightboxStarthis.addEventListener("click", function (e) {
+              e.preventDefault();
+              let starbutstyledata = data[index].Creation;
+              starfunction(starbutstyledata);
+              this.classList.toggle("stared");
+            });
+          }
+        }
       }
     }
   }
@@ -684,14 +712,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
           currentstyledate > stylebegindate &&
           currentstyledate < styleenddate
         ) {
-          pods[i].classList.remove("is-hidden");
-          clearbut.classList.remove("show");
-        } else {
-          pods[i].classList.add("is-hidden");
-        }
-      } else if (search_query == "Opened Styles") {
-        let currentclasses = pods[i].classList.contains("active");
-        if (currentclasses) {
           pods[i].classList.remove("is-hidden");
           clearbut.classList.remove("show");
         } else {
@@ -898,5 +918,80 @@ document.addEventListener("DOMContentLoaded", function (event) {
         searchdiv.classList.remove("is-hidden"); //activate filter/search
       });
     }
+  }
+
+  // Function to build styleinfo HTML for lightbox
+  function buildStyleInfo(index) {
+    let item = data[index];
+    let CurrentArtistName = item.Name;
+    let catlist = item.Category.replace(/\\/g, ""); //remove backslash
+
+    let buildcatlist = catlist.split(",");
+    let buildcatlistoutput = "";
+    buildcatlist.forEach(function (value) {
+      buildcatlistoutput =
+        buildcatlistoutput + "<span>" + value.trim() + "</span>";
+    });
+
+    let deathdate = "";
+    let dagger = "";
+    deathdate = item.Death;
+    if (deathdate != false) {
+      dagger = "<sup> &dagger;</sup>";
+    }
+
+    const lookupArray = CurrentArtistName.replace(/ *\([^)]*\) */g, "")
+      .split(",")
+      .map(function (item) {
+        return item.trim();
+      }); //remove braces, split at comma, trim spaces
+    let LUPart1 = lookupArray[0];
+    let LUPart2 = lookupArray[1];
+    if (LUPart2) {
+      var LUArtist = SearchEngine + LUPart2 + "%20" + LUPart1;
+    } else {
+      var LUArtist = SearchEngine + LUPart1;
+    } //if no comma in name
+    if (mystars.includes(item.Creation)) {
+      var stylestar = " stared";
+    } else {
+      var stylestar = "";
+    }
+
+    let extraclass = "";
+    if (localStorage.getItem("copycat")) {
+      extraclass = " copythecats";
+    }
+
+    let html = '<div class="styleinfo">';
+    html += '<h3 title="' + item.Name + '">' + item.Name + dagger + "</h3>";
+    html += '<div class="more">';
+    html +=
+      '<p class="category' +
+      extraclass +
+      '" title="' +
+      catlist +
+      '"><span class="checkpointname">' +
+      item.Checkpoint +
+      "</span>" +
+      buildcatlistoutput +
+      "</p>";
+    html +=
+      '<span class="clicklinks"><fieldset><legend>Copy Prompt</legend><span class="copyme">' +
+      item.Prompt +
+      "</span></fieldset>";
+    html +=
+      '<p class="extralinks"><a class="zoomimg" title="Zoom" href="./img/' +
+      imgSubDir +
+      "/" +
+      item.Image +
+      '" target="_blank"><img src="./src/zoom-white.svg" width="25" alt="Zoom"><span class="elsp">Zoom</span></a><a href="' +
+      LUArtist +
+      '" title="Look Up Artist" target="_blank" class="lookupartist"><img src="./src/magnifying-glass-white.svg" width="25" alt="Look Up Artist"><span class="elsp">Look Up</span></a><a class="starthis' +
+      stylestar +
+      '" title="Mark as Favorite"><img class="svg" src="./src/heart-outline-white.svg" width="25" title="Mark as Favorite"></a></p></span>';
+    html += "</div>";
+    html += "</div>";
+    return html;
   }
 });
