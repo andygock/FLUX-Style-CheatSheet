@@ -334,6 +334,14 @@ document.addEventListener("DOMContentLoaded", function () {
           mystars
         );
         dom.lightbox.classList.add("show");
+
+        // listen to clicks to "copy prompt" in lightbox
+        const lbInfo = document.getElementById("lightbox-info");
+        lbInfo.addEventListener("click", (ev) => {
+          if (ev.target.classList.contains("copyme")) {
+            copyToClipboard(ev.target.innerText);
+          }
+        });
       }
     });
 
@@ -345,6 +353,10 @@ document.addEventListener("DOMContentLoaded", function () {
         e.target.id === "lightbox-img"
       ) {
         dom.lightbox.classList.remove("show");
+
+        // remove all click listeners to "copy prompt" in lightbox, cloning removes all listeners
+        const lbInfo = document.getElementById("lightbox-info");
+        lbInfo.replaceWith(lbInfo.cloneNode(true));
       }
     });
     document.addEventListener("keydown", (e) => {
