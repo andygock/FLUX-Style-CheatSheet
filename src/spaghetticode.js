@@ -167,8 +167,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let buildcatlistoutput = "";
         buildcatlist.forEach(function (value) {
           //build output without first
-          buildcatlistoutput =
-            buildcatlistoutput + "<span>" + value.trim() + "</span>";
+          buildcatlistoutput += `<span>${value.trim()}</span>`;
         });
 
         let deathdate = "";
@@ -201,65 +200,41 @@ document.addEventListener("DOMContentLoaded", function (event) {
           extraclass = " copythecats";
         }
 
-        outputdata =
-          outputdata +
-          '<div id="' +
-          currentAnchor +
-          '" class="stylepod lazy" data-index="' +
-          i +
-          '" data-creatime="' +
-          data[i].Creation +
-          '" data-bg="./img/' +
-          imgSubDir +
-          "/" +
-          data[i].Image +
-          '">';
-        outputdata = outputdata + '<div class="styleinfo">';
-        outputdata =
-          outputdata +
-          '<h3 title="' +
-          data[i].Name +
-          '">' +
-          data[i].Name +
-          dagger +
-          "</h3>";
-        outputdata = outputdata + '<div class="more">';
-        outputdata =
-          outputdata +
-          '<p class="category' +
-          extraclass +
-          '" title="' +
-          catlist +
-          '"><span class="checkpointname">' +
-          data[i].Checkpoint +
-          "</span>" +
-          buildcatlistoutput +
-          "</p>";
-        outputdata =
-          outputdata +
-          '<span class="clicklinks"><fieldset><legend>Copy Prompt</legend><span class="copyme">' +
-          data[i].Prompt +
-          "</span></fieldset>";
-        outputdata =
-          outputdata +
-          '<p class="extralinks"><a class="zoomimg" title="Zoom" href="./img/' +
-          imgSubDir +
-          "/" +
-          data[i].Image +
-          '" target="_blank"><img src="./src/zoom-white.svg" width="25" alt="Zoom"><span class="elsp">Zoom</span></a><a href="' +
-          LUArtist +
-          '" title="Look Up Artist" target="_blank" class="lookupartist"><img src="./src/magnifying-glass-white.svg" width="25" alt="Look Up Artist"><span class="elsp">Look Up</span></a><a class="starthis' +
-          stylestar +
-          '" title="Mark as Favorite"><img class="svg" src="./src/heart-outline-white.svg" width="25" title="Mark as Favorite"></a></p></span>';
-        outputdata = outputdata + "</div>";
-        outputdata = outputdata + "</div>";
-        outputdata = outputdata + '<div class="gallery">';
-        outputdata = outputdata + "<figure><figcaption></figcaption></figure>";
-        outputdata = outputdata + "<figure></figure>";
-        outputdata = outputdata + "<figure></figure>";
-        outputdata = outputdata + "<figure></figure>";
-        outputdata = outputdata + "</div>";
-        outputdata = outputdata + "</div>";
+        outputdata += `
+          <div id="${currentAnchor}" class="stylepod lazy" data-index="${i}" data-creatime="${data[i].Creation}" data-bg="./img/${imgSubDir}/${data[i].Image}">
+            <div class="styleinfo">
+              <h3 title="${data[i].Name}">${data[i].Name}${dagger}</h3>
+              <div class="more">
+                <p class="category${extraclass}" title="${catlist}"><span class="checkpointname">${data[i].Checkpoint}</span>${buildcatlistoutput}</p>
+                <span class="clicklinks">
+                  <fieldset>
+                    <legend>Copy Prompt</legend>
+                    <span class="copyme">${data[i].Prompt}</span>
+                  </fieldset>
+                </span>
+                <p class="extralinks">
+                  <a class="zoomimg" title="Zoom" href="./img/${imgSubDir}/${data[i].Image}" target="_blank">
+                    <img src="./src/zoom-white.svg" width="25" alt="Zoom">
+                    <span class="elsp">Zoom</span>
+                  </a>
+                  <a href="${LUArtist}" title="Look Up Artist" target="_blank" class="lookupartist">
+                    <img src="./src/magnifying-glass-white.svg" width="25" alt="Look Up Artist">
+                    <span class="elsp">Look Up</span>
+                  </a>
+                  <a class="starthis${stylestar}" title="Mark as Favorite">
+                    <img class="svg" src="./src/heart-outline-white.svg" width="25" title="Mark as Favorite">
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="gallery">
+              <figure><figcaption></figcaption></figure>
+              <figure></figure>
+              <figure></figure>
+              <figure></figure>
+            </div>
+          </div>
+        `;
 
         countstyles++;
 
@@ -315,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       e.preventDefault();
       if (document.getElementById("lightbox").classList.contains("show")) {
         // If lightbox is open, let the link open in new tab
-        window.open(this.href, '_blank');
+        window.open(this.href, "_blank");
         return;
       }
       const imgSrc = this.href;
@@ -349,20 +324,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
   Object.keys(sortedKeys).forEach((key) => {
     if (sortedKeys[key] > 4 && DontShowAnyCountries.includes(key) == false) {
       let filtername = key.replace(/\\/g, "");
-      FilterOutput =
-        FilterOutput +
-        '<span data-srch="' +
-        filtername +
-        '">' +
-        filtername +
-        " <span>" +
-        sortedKeys[key] +
-        "</span></span>";
+      FilterOutput += `<span data-srch="${filtername}">${filtername} <span>${sortedKeys[key]}</span></span>`;
     }
   });
-  FilterOutput =
-    FilterOutput +
-    '<span class="specialfilters" data-srch="Newest Styles">Newest Styles</span><span class="specialfilters" data-srch="New Styles 1.2.0">New with 1.2.0</span><span class="specialfilters" data-srch="New Styles 1.1.0">New with 1.1.0</span><span class="specialfilters" data-srch="Liked">Liked <span><img class="svg" src="./src/heart-outline.svg" width="12"></span></span><span class="specialfilters" data-srch="&dagger;">Only Deceased Artists <span>&dagger;</span></span>';
+  FilterOutput += `
+    <span class="specialfilters" data-srch="Newest Styles">Newest Styles</span>
+    <span class="specialfilters" data-srch="New Styles 1.2.0">New with 1.2.0</span>
+    <span class="specialfilters" data-srch="New Styles 1.1.0">New with 1.1.0</span>
+    <span class="specialfilters" data-srch="Liked">Liked <span><img class="svg" src="./src/heart-outline.svg" width="12"></span></span>
+    <span class="specialfilters" data-srch="&dagger;">Only Deceased Artists <span>&dagger;</span></span>
+  `;
   catsbox.innerHTML = FilterOutput;
 
   // Copy Prompt to Clipboard
@@ -700,48 +671,28 @@ document.addEventListener("DOMContentLoaded", function (event) {
           .replace(/-+$/, ""); // replace everything thats not a letter with a dash, trim dash from front and back
 
         if (thisperson[0].Status != 200) {
-          allarrayresults =
-            allarrayresults +
-            '<a href="./only-data.html#' +
-            currentAnchor +
-            '" target="_onlydata" class="ASearchStatus' +
-            thisperson[0].Status +
-            '" title="' +
-            titletexts[thisperson[0].Status] +
-            '">' +
-            thisperson[0].ArtistName +
-            "</a>";
+          allarrayresults += `<a href="./only-data.html#${currentAnchor}" target="_onlydata" class="ASearchStatus${
+            thisperson[0].Status
+          }" title="${titletexts[thisperson[0].Status]}">${
+            thisperson[0].ArtistName
+          }</a>`;
         } else {
-          onlyavailable =
-            onlyavailable +
-            '<span class="ASearchStatus' +
-            thisperson[0].Status +
-            '">' +
-            thisperson[0].ArtistName +
-            "</span>";
+          onlyavailable += `<span class="ASearchStatus${thisperson[0].Status}">${thisperson[0].ArtistName}</span>`;
         }
       }
     }
 
     if (countshownstyles != 0 && search_query != 0) {
-      searchinfo.innerHTML =
-        " - " + search_query + " (" + countshownstyles + ")";
+      searchinfo.innerHTML = ` - ${search_query} (${countshownstyles})`;
       notavail.innerHTML = "";
       if (allarrayresults) {
-        notavail.innerHTML =
-          'Similar names of <a href="./only-data.html#notavailable" class="internal">artists that are unavailable</a>: <span id="naaresults">' +
-          allarrayresults +
-          "</span>";
+        notavail.innerHTML = `Similar names of <a href="./only-data.html#notavailable" class="internal">artists that are unavailable</a>: <span id="naaresults>${allarrayresults}</span>`;
       }
     } else if (countshownstyles == 0 && search_query != 0) {
       searchinfo.innerHTML = "";
       notavail.innerHTML = "";
       if (allarrayresults) {
-        notavail.innerHTML =
-          'Checking for similar names and <a href="./only-data.html#notavailable" class="internal">artists that are unavailable</a>: <span id="naaresults">' +
-          onlyavailable +
-          allarrayresults +
-          "</span>";
+        notavail.innerHTML = `Checking for similar names and <a href="./only-data.html#notavailable" class="internal">artists that are unavailable</a>: <span id="naaresults">${onlyavailable}${allarrayresults}</span>`;
       }
     } else {
       searchinfo.innerHTML = "";
@@ -782,26 +733,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
   function ratioCalc() {
     let imgbasesize = document.getElementById("ratiobox").value;
     if (imgbasesize > 0) {
-      document.getElementById("ir1b1").innerHTML =
-        imgbasesize + " &times; " + imgbasesize;
+      document.getElementById(
+        "ir1b1"
+      ).innerHTML = `${imgbasesize} &times; ${imgbasesize}`;
       let twobythree = (imgbasesize / 2) * 3;
-      document.getElementById("ir2b3").innerHTML =
-        imgbasesize + " &times; " + Math.round(twobythree);
+      document.getElementById(
+        "ir2b3"
+      ).innerHTML = `${imgbasesize} &times; ${Math.round(twobythree)}`;
       let threebyfour = (imgbasesize / 3) * 4;
-      document.getElementById("ir3b4").innerHTML =
-        imgbasesize + " &times; " + Math.round(threebyfour);
+      document.getElementById(
+        "ir3b4"
+      ).innerHTML = `${imgbasesize} &times; ${Math.round(threebyfour)}`;
       let fourbyfive = (imgbasesize / 4) * 5;
-      document.getElementById("ir4b5").innerHTML =
-        imgbasesize + " &times; " + Math.round(fourbyfive);
+      document.getElementById(
+        "ir4b5"
+      ).innerHTML = `${imgbasesize} &times; ${Math.round(fourbyfive)}`;
       let sixteenbynine = (imgbasesize / 9) * 16;
-      document.getElementById("ir16b9").innerHTML =
-        Math.round(sixteenbynine) + " &times; " + imgbasesize;
+      document.getElementById("ir16b9").innerHTML = `${Math.round(
+        sixteenbynine
+      )} &times; ${imgbasesize}`;
       let sixteenbyten = (imgbasesize / 10) * 16;
-      document.getElementById("ir16b10").innerHTML =
-        Math.round(sixteenbyten) + " &times; " + imgbasesize;
+      document.getElementById("ir16b10").innerHTML = `${Math.round(
+        sixteenbyten
+      )} &times; ${imgbasesize}`;
       let twentyonebynine = (imgbasesize / 9) * 21;
-      document.getElementById("ir21b9").innerHTML =
-        Math.round(twentyonebynine) + " &times; " + imgbasesize;
+      document.getElementById("ir21b9").innerHTML = `${Math.round(
+        twentyonebynine
+      )} &times; ${imgbasesize}`;
     }
   }
   // Imaga Ratio Delay
@@ -886,35 +844,34 @@ document.addEventListener("DOMContentLoaded", function (event) {
       extraclass = " copythecats";
     }
 
-    let html = '<div class="styleinfo">';
-    html += '<h3 title="' + item.Name + '">' + item.Name + dagger + "</h3>";
-    html += '<div class="more">';
-    html +=
-      '<p class="category' +
-      extraclass +
-      '" title="' +
-      catlist +
-      '"><span class="checkpointname">' +
-      item.Checkpoint +
-      "</span>" +
-      buildcatlistoutput +
-      "</p>";
-    html +=
-      '<span class="clicklinks"><fieldset><legend>Copy Prompt</legend><span class="copyme">' +
-      item.Prompt +
-      "</span></fieldset>";
-    html +=
-      '<p class="extralinks"><a class="zoomimg" title="Zoom" href="./img/' +
-      imgSubDir +
-      "/" +
-      item.Image +
-      '" target="_blank"><img src="./src/zoom-white.svg" width="25" alt="Zoom"><span class="elsp">Zoom</span></a><a href="' +
-      LUArtist +
-      '" title="Look Up Artist" target="_blank" class="lookupartist"><img src="./src/magnifying-glass-white.svg" width="25" alt="Look Up Artist"><span class="elsp">Look Up</span></a><a class="starthis' +
-      stylestar +
-      '" title="Mark as Favorite"><img class="svg" src="./src/heart-outline-white.svg" width="25" title="Mark as Favorite"></a></p></span>';
-    html += "</div>";
-    html += "</div>";
+    let html = `
+      <div class="styleinfo">
+        <h3 title="${item.Name}">${item.Name}${dagger}</h3>
+        <div class="more">
+          <p class="category${extraclass}" title="${catlist}"><span class="checkpointname">${item.Checkpoint}</span>${buildcatlistoutput}</p>
+          <span class="clicklinks">
+            <fieldset>
+              <legend>Copy Prompt</legend>
+              <span class="copyme">${item.Prompt}</span>
+            </fieldset>
+          </span>
+          <p class="extralinks">
+            <a class="zoomimg" title="Zoom" href="./img/${imgSubDir}/${item.Image}" target="_blank">
+              <img src="./src/zoom-white.svg" width="25" alt="Zoom">
+              <span class="elsp">Zoom</span>
+            </a>
+            <a href="${LUArtist}" title="Look Up Artist" target="_blank" class="lookupartist">
+              <img src="./src/magnifying-glass-white.svg" width="25" alt="Look Up Artist">
+              <span class="elsp">Look Up</span>
+            </a>
+            <a class="starthis${stylestar}" title="Mark as Favorite">
+              <img class="svg" src="./src/heart-outline-white.svg" width="25" title="Mark as Favorite">
+            </a>
+          </p>
+        </div>
+      </div>
+    `;
+
     return html;
   }
 });
