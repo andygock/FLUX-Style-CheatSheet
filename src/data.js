@@ -11827,7 +11827,7 @@ const data = dataOriginal.map((item) => {
   return {
     ...item,
     Image: normalizeUnicode(item.Prompt) + ".webp",
-    Prompt: `style of ${item.Prompt}`,
+    Prompt: `${item.Prompt}`,
     Checkpoint: "flux1-dev-fp8",
   };
 });
