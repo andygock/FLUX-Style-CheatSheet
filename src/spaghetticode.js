@@ -279,6 +279,26 @@ document.addEventListener("DOMContentLoaded", function (event) {
   buildstyles();
   searchInput.placeholder = "Search " + countstyles + " Styles";
 
+  // Lightbox functionality
+  document.querySelectorAll(".zoomimg").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const imgSrc = this.href;
+      document.getElementById("lightbox-img").src = imgSrc;
+      document.getElementById("lightbox").style.display = "flex";
+    });
+  });
+
+  document.getElementById("lightbox-close").addEventListener("click", () => {
+    document.getElementById("lightbox").style.display = "none";
+  });
+
+  document.getElementById("lightbox").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) {
+      document.getElementById("lightbox").style.display = "none";
+    }
+  });
+
   // Create filter tags
   var sortedKeys = Object.keys(tags)
     .sort()
@@ -383,6 +403,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // Close all open styles on Escape key press
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
+      if (document.getElementById("lightbox").style.display === "flex") {
+        document.getElementById("lightbox").style.display = "none";
+        return;
+      }
       var activePods = document.querySelectorAll(".stylepod.active");
       activePods.forEach(function (pod) {
         pod.classList.remove("active");
@@ -390,6 +414,34 @@ document.addEventListener("DOMContentLoaded", function (event) {
       // Remove hash from URL
       const url = window.location.href.replace(/#.*/, "");
       history.pushState({}, "", url);
+    } else if (e.key.toLowerCase() === "z") {
+      const lightbox = document.getElementById("lightbox");
+      if (lightbox.style.display === "flex") {
+        lightbox.style.display = "none";
+      } else {
+        const activePods = document.querySelectorAll(".stylepod.active");
+        if (activePods.length > 0) {
+          // Find the most visible active pod (topmost in viewport)
+          let visiblePods = [];
+          activePods.forEach((pod) => {
+            const rect = pod.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              visiblePods.push({ pod, top: rect.top });
+            }
+          });
+          if (visiblePods.length > 0) {
+            visiblePods.sort((a, b) => a.top - b.top);
+            const imgSrc = visiblePods[0].pod.getAttribute("data-bg");
+            document.getElementById("lightbox-img").src = imgSrc;
+            lightbox.style.display = "flex";
+          } else {
+            // Fallback to first active pod if none visible
+            const imgSrc = activePods[0].getAttribute("data-bg");
+            document.getElementById("lightbox-img").src = imgSrc;
+            lightbox.style.display = "flex";
+          }
+        }
+      }
     }
   });
 
