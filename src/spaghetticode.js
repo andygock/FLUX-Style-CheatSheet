@@ -380,6 +380,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         this.classList.toggle("active");
 
+        // Scroll to the expanded pod to keep the clicked area in view
+        setTimeout(() => {
+          this.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+
         //Anchor in url bar
         var getnewanker = e.target.id; // hehe
 
