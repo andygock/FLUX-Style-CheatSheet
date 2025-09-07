@@ -5,7 +5,7 @@
 // 204 - artist is recognized, but too different/generic
 // 500 - other
 
-export const exclArtists = [
+const exclArtists = [
   { Name: "Abareshi", FirstName: "Panteha", Code: "404", Extrainfo: "" },
   { Name: "Abbasnia", FirstName: "Sina", Code: "404", Extrainfo: "" },
   {

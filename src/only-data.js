@@ -1,6 +1,3 @@
-import { data } from "./data.js";
-import { exclArtists } from "./data-excluded-artists.js";
-
 document.addEventListener("DOMContentLoaded", function (event) {
   var SearchEngine = "https://www.google.com/search?q=";
   var outputdata = "";

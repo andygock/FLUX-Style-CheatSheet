@@ -1,4 +1,4 @@
-export const dataOriginal = [
+const dataOriginal = [
   {
     Type: "1",
     Name: "Aarons, Slim",
@@ -11816,17 +11816,15 @@ export const dataOriginal = [
   },
 ];
 
-import { formatName, normalizeUnicode } from "./utils.js";
-
 // make a copy called 'data', but change Image filename to new one
 // e.g Prompt of "style of Ignacio Zuloaga" becomes "Ignacio Zuloaga.webp"
-export const data = dataOriginal.map((item) => {
+const data = dataOriginal.map((item) => {
   const formattedName = formatName(item.Name);
   const normalizedName = normalizeUnicode(formattedName);
   const originalPrompt = item.Prompt;
   return {
     ...item,
-    Image: normalizedName + ".webp",
+    Image: normalizeUnicode(item.Prompt) + ".webp",
     Prompt: `style of ${normalizedName}`,
     Checkpoint: "flux1-dev-fp8",
   };
