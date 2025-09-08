@@ -417,6 +417,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Cuno-Amiet.webp",
     Creation: "202304270401",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -2226,6 +2227,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Pierre-Puvis-de-Chavannes.webp",
     Creation: "202305081458",
+    Ignore: "nsfw",
   },
   {
     Type: "1",
@@ -2941,6 +2943,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Michael-DeForge.webp",
     Creation: "202305272153",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -3834,6 +3837,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Roberto-Ferri.webp",
     Creation: "202306161219",
+    Ignore: "nsfw",
   },
   {
     Type: "1",
@@ -4880,6 +4884,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Ernst-Haeckel.webp",
     Creation: "202304060435",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -4958,6 +4963,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Keith-Haring.webp",
     Creation: "202304041234",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -5524,6 +5530,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Jean-Auguste-Dominique-Ingres.webp",
     Creation: "202306091508",
+    Ignore: "nsfw",
   },
   {
     Type: "1",
@@ -6437,6 +6444,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Yayoi-Kusama.webp",
     Creation: "202305171230",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -7393,6 +7401,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Barry-McGee.webp",
     Creation: "202305091027",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -8125,6 +8134,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Hiroshi-Nagai.webp",
     Creation: "202304101122",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -9274,6 +9284,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Bridget-Riley.webp",
     Creation: "202310231709",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -9587,6 +9598,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Theo-van-Rysselberghe.webp",
     Creation: "202304221933",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -9796,6 +9808,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Paula-Scher.webp",
     Creation: "202305181736",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -10190,6 +10203,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Paul-Signac.webp",
     Creation: "202304241203",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -10815,6 +10829,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Ori-Toor.webp",
     Creation: "202305190406",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -11027,6 +11042,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Victor-Vasarely.webp",
     Creation: "202310231735",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -11225,6 +11241,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "John-William-Waterhouse.webp",
     Creation: "202306231221",
+    Ignore: "nsfw",
   },
   {
     Type: "1",
@@ -11251,6 +11268,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "George-Frederic-Watts.webp",
     Creation: "202311231213",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -11447,6 +11465,7 @@ const dataOriginal = [
     Checkpoint: "Deliberate 2.0",
     Image: "Barry-Windsor-Smith.webp",
     Creation: "202304060709",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -11821,13 +11840,15 @@ const dataOriginal = [
 //
 // assume globals exist: formatName, normalizeUnicode
 //
-const data = dataOriginal.map((item) => {
-  const formattedName = formatName(item.Name);
-  // const normalizedName = normalizeUnicode(formattedName);
-  return {
-    ...item,
-    Image: normalizeUnicode(item.Prompt) + ".webp",
-    Prompt: `${item.Prompt}`,
-    Checkpoint: "flux1-dev-fp8",
-  };
-});
+const data = dataOriginal
+  .filter((item) => !item.Ignore)
+  .map((item) => {
+    const formattedName = formatName(item.Name);
+    // const normalizedName = normalizeUnicode(formattedName);
+    return {
+      ...item,
+      Image: normalizeUnicode(item.Prompt) + ".webp",
+      Prompt: `${item.Prompt}`,
+      Checkpoint: "flux1-dev-fp8",
+    };
+  });
