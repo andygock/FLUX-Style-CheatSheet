@@ -365,7 +365,7 @@ footer a:hover {
   background-size: 0 0;
   justify-content: space-between;
 }
-.stylepod:hover .gallery {
+.stylepod:hover .gallery:not(#lightbox-info .gallery) {
   display: flex;
 }
 .stylepod figure {
