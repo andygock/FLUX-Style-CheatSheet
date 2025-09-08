@@ -8134,7 +8134,6 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Hiroshi-Nagai.webp",
     Creation: "202304101122",
-    Ignore: "bad",
   },
   {
     Type: "1",
@@ -8148,6 +8147,7 @@ const dataOriginal = [
     Checkpoint: "DreamShaper 3.2",
     Image: "Kazumasa-Nagai.webp",
     Creation: "202306140525",
+    Ignore: "bad",
   },
   {
     Type: "1",
@@ -11848,7 +11848,7 @@ const data = dataOriginal
     return {
       ...item,
       Image: normalizeUnicode(item.Prompt) + ".webp",
-      Prompt: `${item.Prompt}`,
+      Prompt: `${normalizeUnicode(item.Prompt)}`,
       Checkpoint: "flux1-dev-fp8",
     };
   });
