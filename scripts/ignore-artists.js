@@ -1,3 +1,7 @@
+//
+// list artists we need to ignore
+// these have the .Ignore property set in data.js
+//
 import fs from "fs";
 import path from "path";
 import vm from "vm";
