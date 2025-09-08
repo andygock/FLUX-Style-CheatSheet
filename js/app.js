@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
     lightbox: document.getElementById("lightbox"),
     lightboxImg: document.getElementById("lightbox-img"),
     lightboxInfo: document.getElementById("lightbox-info"),
+    updateLightboxInfo: function () {
+      this.lightboxInfo = document.getElementById("lightbox-info");
+    },
     searchInfo: document.getElementById("searchinfo"),
     notAvail: document.getElementById("notavail"),
   };
@@ -328,16 +331,19 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         // Open lightbox for clicks on the main pod area
         dom.lightboxImg.src = pod.dataset.bg;
+
+        // get new reference to lightbox info element, as this changes during app operation
+        dom.updateLightboxInfo();
         dom.lightboxInfo.innerHTML = createStylePodHTML(
           data[pod.dataset.index],
           pod.dataset.index,
           mystars
         );
+
         dom.lightbox.classList.add("show");
 
         // listen to clicks to "copy prompt" in lightbox
-        const lbInfo = document.getElementById("lightbox-info");
-        lbInfo.addEventListener("click", (ev) => {
+        dom.lightboxInfo.addEventListener("click", (ev) => {
           if (ev.target.classList.contains("copyme")) {
             copyToClipboard(ev.target.innerText);
           }
@@ -354,9 +360,9 @@ document.addEventListener("DOMContentLoaded", function () {
       ) {
         dom.lightbox.classList.remove("show");
 
-        // remove all click listeners to "copy prompt" in lightbox, cloning removes all listeners
-        const lbInfo = document.getElementById("lightbox-info");
-        lbInfo.replaceWith(lbInfo.cloneNode(true));
+        // remove all click listeners to "copy prompt" in lightbox, cloning removes all listeners within
+        dom.updateLightboxInfo();
+        dom.lightboxInfo.replaceWith(dom.lightboxInfo.cloneNode(true));
       }
     });
     document.addEventListener("keydown", (e) => {
